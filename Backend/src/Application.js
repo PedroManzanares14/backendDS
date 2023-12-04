@@ -9,9 +9,9 @@ const Application = express();
 
 GetMongoConnection();
 Application.use(cors());
-Application.use(bodyParser.json());
-Application.use(bodyParser.urlencoded({ extended: true }));
-Application.use(fileUpload({ useTempFiles: true, tempFileDir: './Upload' }));
-Application.use('/backend/api/rest/sivardenuncias/server/node/route/fetch/axios', Routes);
+Application.use(bodyParser.json({ limit: "100mb", extended: true }));
+Application.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
+Application.use(fileUpload({ useTempFiles: true, tempFileDir: "./Resources" }));
+Application.use("/backend/api/rest/sivardenuncias/server/node/route/fetch/axios", Routes);
 
 export default Application;

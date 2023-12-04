@@ -13,6 +13,7 @@ export const UploadComplaint = async (req, res) => {
       const categoria = new Types.ObjectId(category);
 
       if (img) {
+
         //img file
         const cloudimg = await UploadImage(img);
         const image = { public_id: cloudimg.public_id, url: cloudimg.url };
@@ -24,7 +25,7 @@ export const UploadComplaint = async (req, res) => {
           res.status(200).json({ state: "success", details: "your complaint has been registered" })
         }).catch(error => {
           //remove(img.tempFilePath);
-          res.status(500).json({ state: "failure", details: error.message })
+          res.status(error.http_code).json({ state: "failure", details: error.message })
         })
       } else {
         //Upload complaint
@@ -37,11 +38,12 @@ export const UploadComplaint = async (req, res) => {
           res.status(500).json({ state: "failure", details: error.message })
         })
       }
+
     } else {
       res.status(400).json({ state: "error", details: "There is an error in the input parameters." })
     }
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message })
+    res.status(error.http_code).json({ state: "failure", details: error.message })
   }
 }
 
@@ -69,7 +71,7 @@ export const GetComplaints = async (req, res) => {
 
     res.status(200).json({ state: "success", results })
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message })
+    res.status(error.http_code).json({ state: "failure", details: error.message })
   }
 }
 
@@ -95,7 +97,7 @@ export const GetComplaintsByUserId = async (req, res) => {
       res.status(200).json({ state: "success", results: [] })
     }
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message })
+    res.status(error.http_code).json({ state: "failure", details: error.message })
   }
 }
 
@@ -107,10 +109,10 @@ export const UpdateComplaint = async (req, res) => {
       Publicacion.findByIdAndUpdate(Id, { state }).then((data) => {
         res.status(200).json({ state: "success", details: `El estado de la denuncia paso de ser ${data.state} a estar en: ${state}` });
       }).catch(error => {
-        res.status(500).json({ state: "failure", details: error.message })
+        res.status(error.http_code).json({ state: "failure", details: error.message })
       });
     } catch (error) {
-      res.status(500).json({ state: "failure", details: error.message })
+      res.status(error.http_code).json({ state: "failure", details: error.message })
     }
   }
 }
@@ -123,9 +125,9 @@ export const DeleteComplaint = (req, res) => {
       Apoyo.deleteMany({ publicacion: Id }).then(() => console.log("the support of the complaint eliminated"))
       res.status(200).json({ state: "success", details: `La denuncia se elimino correctamete` });
     }).catch((error) => {
-      res.status(500).json({ state: "failure", details: error.message })
+      res.status(error.http_code).json({ state: "failure", details: error.message })
     })
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message })
+    res.status(error.http_code).json({ state: "failure", details: error.message })
   }
 }

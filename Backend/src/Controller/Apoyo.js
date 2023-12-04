@@ -18,7 +18,7 @@ export const SupportComplaint = async (req, res) => {
         res.status(202).json({ state: 'nosupport', details: "Usted ya apoyo esta denuncia." })
       }
     } catch (error) {
-      res.status(504).json({ state: 'failure', details: error.message })
+      res.status(error.http_code).json({ state: 'failure', details: error.message })
     }
   } else {
     res.status(404).json({ state: 'error', details: "There is an error in the input parameters" })
@@ -35,6 +35,6 @@ export const GetSupportByComplaint = async (req, res) => {
       res.status(404).json({ state: 'error', details: "There is an error in the input parameters" })
     }
   } catch (error) {
-    res.status(504).json({ state: 'failure', details: error.message })
+    res.status(error.http_code).json({ state: 'failure', details: error.message })
   }
 }

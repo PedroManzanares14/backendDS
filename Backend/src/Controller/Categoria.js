@@ -12,14 +12,14 @@ export const UploadCategory = async (req, res) => {
         upload.save().then((data) => {
           res.status(200).json({ state: "success", details: `Categorie ${data.name} has been registered.` })
         }).catch((error) => {
-          res.status(500).json({ state: "failure", details: error.message })
+          res.status(error.http_code).json({ state: "failure", details: error.message })
         });
       }
     } else {
       res.status(400).json({ state: "error", details: "There is an error in the input parameters." })
     }
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message })
+    res.status(error.http_code).json({ state: "failure", details: error.message })
   }
 }
 
@@ -28,6 +28,6 @@ export const GetCategories = async (req, res) => {
     const categories = await Categoria.find({});
     res.status(200).json({ state: "success", categories })
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message })
+    res.status(error.http_code).json({ state: "failure", details: error.message })
   }
 }

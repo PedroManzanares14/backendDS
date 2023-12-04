@@ -32,7 +32,6 @@ const apoyo = new Schema({
   codigo: { type: String, required: true }
 }, { versionKey: false }).plugin(mongoosePaginate);
 
-
 const categoria = new Schema({
   name: { type: String, required: true }
 }, { versionKey: false })

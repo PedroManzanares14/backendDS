@@ -35,7 +35,7 @@ export const SignUp = async (req, res) => {
     }
   } catch (error) {
     //Send error message
-    res.status(500).json({ state: "failure", details: error.message });
+    res.status(error.http_code).json({ state: "failure", details: error.message });
   }
 };
 
@@ -51,7 +51,7 @@ export const Login = async (req, res) => {
       res.status(200).json({ state: "error", details: "Usuario o contraseña incorrectos." });
     }
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message });
+    res.status(error.http_code).json({ state: "failure", details: error.message });
   }
 }
 
@@ -73,10 +73,10 @@ export const GetUsers = async (req, res) => {
     Usuario.paginate({ username: { $regex: Search ?? "", $options: 'i' }, rol: Rol }, { page: Page, limit: 10 }).then((results) => {
       res.status(200).json({ state: 'success', results });
     }).catch(error => {
-      res.status(500).json({ state: "failure", details: error.message })
+      res.status(error.http_code).json({ state: "failure", details: error.message })
     });
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message });
+    res.status(error.http_code).json({ state: "failure", details: error.message });
   }
 }
 
@@ -86,10 +86,10 @@ export const ChangeRol = async (req, res) => {
     Usuario.findByIdAndUpdate(Id, { rol: Rol }).then((result) => {
       res.status(200).json({ state: "success", details: `El usuario:${result.username}, paso de ser ${result.rol} a ser ${Rol}` })
     }).catch(error => {
-      res.status(500).json({ state: "failure", details: error.message })
+      res.status(error.http_code).json({ state: "failure", details: error.message })
     });
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message })
+    res.status(error.http_code).json({ state: "failure", details: error.message })
   }
 }
 
@@ -111,7 +111,7 @@ export const UpdatePhoto = async (req, res) => {
           res.status(200).json({ state: 'success', token });
         }).catch(error => {
           //remove(photo.tempFilePath)
-          res.status(500).json({ state: "failure", details: error.message })
+          res.status(error.http_code).json({ state: "failure", details: error.message })
         })
       } else {
         //remove(photo.tempFilePath)
@@ -121,7 +121,7 @@ export const UpdatePhoto = async (req, res) => {
       res.status(400).json({ status: 'error', details: 'There is an error in the input parameters' })
     }
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message })
+    res.status(error.http_code).json({ state: "failure", details: error.message })
   }
 }
 
@@ -146,7 +146,7 @@ export const UpdateProfile = async (req, res) => {
       res.status(400).json({ status: 'error', details: 'There is an error in the input parameters' })
     }
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message })
+    res.status(error.http_code).json({ state: "failure", details: error.message })
   }
 }
 
@@ -160,14 +160,14 @@ export const UpdatePass = async (req, res) => {
         Usuario.findByIdAndUpdate(Id, { password: await EncryptPassword(password) }).then(() => {
           res.status(200).json({ state: "success", details: 'Your password has been updated' });
         }).catch(error => {
-          res.status(500).json({ state: "failure", details: error.message })
+          res.status(error.http_code).json({ state: "failure", details: error.message })
         })
       } else {
         res.status(400).json({ state: "error", details: "Your pass could't be update" })
       }
     }
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message })
+    res.status(error.http_code).json({ state: "failure", details: error.message })
   }
 }
 
@@ -179,13 +179,13 @@ export const StateUser = async (req, res) => {
       Usuario.findByIdAndUpdate(Id, { state: !check.state }).then((result) => {
         res.status(200).json({ state: "success", details: `El cambio de estado del usuario se realizo correctamente` })
       }).catch(error => {
-        res.status(500).json({ state: "failure", details: error.message })
+        res.status(error.http_code).json({ state: "failure", details: error.message })
       });
     } else {
       res.status(400).json({ state: "error", details: "User could't be lock or no exist." })
     }
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message })
+    res.status(error.http_code).json({ state: "failure", details: error.message })
   }
 }
 
@@ -196,10 +196,10 @@ export const DeleteUser = async (req, res) => {
       if (data.image.public_id !== "") DeleteImage(data.image.public_id);
       res.status(200).json({ state: "success", details: `User ${data.username} as been deleted.` })
     }).catch(error => {
-      res.status(500).json({ state: "failure", details: error.message })
+      res.status(error.http_code).json({ state: "failure", details: error.message })
     });
   } catch (error) {
-    res.status(500).json({ state: "failure", details: error.message })
+    res.status(error.http_code).json({ state: "failure", details: error.message })
   }
 }
 
@@ -224,7 +224,7 @@ export const SendEmailCode = async (req, res) => {
           res.status(200).json({ state: 'success', message: 'Se te ha enviado un correo electronico con el codigo de apoyo para la denuncia' });
           console.log(`Send email to ${getuser.username}, idmessage:${responce.messageId}`);
         }).catch((error => {
-          res.status(400).json({ state: 'error', message: 'Lo sentimos, ocurrio un error al enviarte el correo electronico con el codigo de apoyo, verifique que su correo sea correcto por favor' });
+          res.status(error.http_code0).json({ state: 'error', message: 'Lo sentimos, ocurrio un error al enviarte el correo electronico con el codigo de apoyo, verifique que su correo sea correcto por favor' });
           console.log(`There is a problem with nodemailer ${error}`);
         }));
       } else {
@@ -234,6 +234,6 @@ export const SendEmailCode = async (req, res) => {
       res.status(400).json({ state: "error", details: "There is an error in the input parameters" });
     }
   } catch (error) {
-    res.status(500).json({ state: "failure", message: error.message })
+    res.status(error.http_code).json({ state: "failure", message: error.message })
   }
 }
